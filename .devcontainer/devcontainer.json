@@ -1,31 +1,35 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/php
+// README at: https://github.com/devcontainers/templates/tree/main/src/php-mariadb
 {
-	"name": "PHP",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/php:1-8.2-bullseye",
-  
-	// Configure tool-specific properties.
-	"customizations": {
-	  // Configure properties specific to VS Code.
-	  "vscode": {
-		"extensions": [
-		  "ikappas.composer"
-		]
-	  }
-	},
-  
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"name": "PHP & MariaDB",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+	"postCreateCommand": "sudo chmod a+x \"$(pwd)\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)\" /var/www/html; if [ -f composer.json ];then composer install;fi",
+	// For use with PHP or Apache (e.g.php -S localhost:8080 or apache2ctl start)
 	"forwardPorts": [
-	  8080
+		8080,
+		3306
 	],
 	"features": {
-	  "ghcr.io/devcontainers/features/github-cli:1": {}
+		"ghcr.io/devcontainers/features/php:1": {}
 	},
+	"customizations": {
+		"vscode": {
+		  "extensions": [
+			"ikappas.composer"
+		  ]
+		}
+	  },
   
+	
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sudo chmod a+x \"$(pwd)\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)\" /var/www/html; if [ -f composer.json ];then composer install;fi"
-  
+	// "postCreateCommand": "sudo chmod a+x \"$(pwd)\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)\" /var/www/html"
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
-  }
+}
